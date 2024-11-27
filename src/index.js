@@ -3,8 +3,8 @@ wp.blocks.registerBlockType('my-namespace/my-block', {
     icon: 'smiley',
     category: 'common',
     attributes: {
-        skyColor: {type: 'string', source: 'text', selector: '.skyColor'},
-        grassColor: {type: 'string', source: 'text', selector: '.grassColor'},
+        skyColor: {type: 'string'},
+        grassColor: {type: 'string'},
     },
     edit: function(props) {
         function updateSkyColor(event) {
