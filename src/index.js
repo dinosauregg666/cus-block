@@ -2,34 +2,55 @@ import './index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from "@wordpress/components"
 import React from 'react'
 
+// 如果没有设置答案就锁定帖子的保存功能
+!function() {
+    let locked = false
+     wp.data.subscribe(function() {
+         const results = wp.data.select('core/block-editor').getBlocks().filter(function(block) {
+             return block.name == 'my-namespace/my-block' && block.attributes.correctAnswer == undefined
+         })
+
+         if(results.length && locked == false) {
+             locked = true
+             wp.data.dispatch('core/editor').lockPostSaving('mylockflag')
+         }
+
+         if(!results.length && locked) {
+             locked = false
+             wp.data.dispatch('core/editor').unlockPostSaving('mylockflag')
+         }
+     })
+}()
+
 wp.blocks.registerBlockType('my-namespace/my-block', {
     title: 'My Custom Block',
     icon: 'smiley',
     category: 'common',
     attributes: {
         question: {type: 'string'},
-        answers: {type: 'array', default: ['red', 'blue']}
+        answers: {type: 'array', default: ['']},
+        correctAnswer: {type: 'number', default: undefined}
     },
     edit: EditComponent,
     save: function(props) {
         return null
     },
-    deprecated: [{
-        attributes: {
-            skyColor: {type: 'string'},
-            grassColor: {type: 'string'},
-        },
-        save: function(props) {
-            return (
-                <div>
-                    color:
-                    <span className="skyColor">{props.attributes.skyColor}</span>
-                    ===========
-                    <span className="grassColor">{props.attributes.grassColor}</span>
-                </div>
-            )
-        },
-    }]
+    // deprecated: [{
+    //     attributes: {
+    //         skyColor: {type: 'string'},
+    //         grassColor: {type: 'string'},
+    //     },
+    //     save: function(props) {
+    //         return (
+    //             <div>
+    //                 color:
+    //                 <span className="skyColor">{props.attributes.skyColor}</span>
+    //                 ===========
+    //                 <span className="grassColor">{props.attributes.grassColor}</span>
+    //             </div>
+    //         )
+    //     },
+    // }]
 });
 
 function EditComponent(props) {
@@ -41,6 +62,20 @@ function EditComponent(props) {
             return index != indexToDelete
         })
         props.setAttributes({answers: newAnswers})
+    }
+
+    function deleteAnswer(indexToDelete) {
+        const newAnswers = props.attributes.answers.filter(function(x, index) {
+            return index != indexToDelete
+        })
+        props.setAttributes({answers: newAnswers})
+        if(indexToDelete == props.attributes.correctAnswer) {
+            props.setAttributes({correctAnswer: undefined})
+        }
+    }
+
+    function markAsCorrect(index) {
+        props.setAttributes({correctAnswer: index})
     }
 
     return (
@@ -60,8 +95,8 @@ function EditComponent(props) {
                                 }} />
                             </FlexBlock>
                             <FlexItem>
-                                <Button>
-                                    <Icon className="mark-as-correct" icon="star-empty"></Icon>
+                                <Button onClick={() => markAsCorrect(index)}>
+                                    <Icon className="mark-as-correct" icon={props.attributes.correctAnswer == index ? 'star-filled' : 'star-empty'}></Icon>
                                 </Button>
                             </FlexItem>
                             <FlexItem>
