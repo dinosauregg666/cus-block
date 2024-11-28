@@ -1,0 +1,20 @@
+.myClass {
+  padding: 20px;
+  .mark-as-correct {
+    color: #ffd700;
+    position: relative;
+    top: -3px;
+    transition: transform 0.3s ease-out;
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
+  .delete {
+    color: #ff0000;
+    position: relative;
+    top: -5px;
+    &:hover {
+      color: #c20000!important;
+    }
+  }
+}
