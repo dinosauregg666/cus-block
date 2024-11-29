@@ -1,5 +1,7 @@
 import './index.scss'
-import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon} from "@wordpress/components"
+import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
+import {InspectorControls} from "@wordpress/block-editor"
+
 import React from 'react'
 
 // 如果没有设置答案就锁定帖子的保存功能
@@ -29,7 +31,8 @@ wp.blocks.registerBlockType('my-namespace/my-block', {
     attributes: {
         question: {type: 'string'},
         answers: {type: 'array', default: ['']},
-        correctAnswer: {type: 'number', default: undefined}
+        correctAnswer: {type: 'number', default: undefined},
+        bgColor: {type: 'string', default: '#EBEBEB'}
     },
     edit: EditComponent,
     save: function(props) {
@@ -79,7 +82,15 @@ function EditComponent(props) {
     }
 
     return (
-        <div className="myClass">
+        <div className="myClass" style={{backgroundColor: props.attributes.bgColor}}>
+            {/* 添加后台设置背景颜色的控制面板 */}
+            <InspectorControls initialOpen={true}>
+                <PanelBody title="Background Color">
+                    <PanelRow>
+                        <ColorPicker color={props.attributes.bgColor} onChangeComplete={x => props.setAttributes({bgColor: x.hex})} />
+                    </PanelRow>
+                </PanelBody>
+            </InspectorControls>
             <TextControl label="Question:" value={props.attributes.question} onChange={updateQuestion} style={{fontSize: "20px"}} />
             <p style={{fontSize: "13px", margin: "20px 0 10px 0"}}>Answers:</p>
 
