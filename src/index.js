@@ -1,6 +1,6 @@
 import './index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
-import {InspectorControls} from "@wordpress/block-editor"
+import {InspectorControls, BlockControls, AlignmentToolbar} from "@wordpress/block-editor"
 import {ChromePicker} from 'react-color'
 
 import React from 'react'
@@ -33,7 +33,8 @@ wp.blocks.registerBlockType('my-namespace/my-block', {
         question: {type: 'string'},
         answers: {type: 'array', default: ['']},
         correctAnswer: {type: 'number', default: undefined},
-        bgColor: {type: 'string', default: '#EBEBEB'}
+        bgColor: {type: 'string', default: '#EBEBEB'},
+        theAlignment: {type: 'string', default: 'left'}
     },
     edit: EditComponent,
     save: function(props) {
@@ -84,6 +85,10 @@ function EditComponent(props) {
 
     return (
         <div className="myClass" style={{backgroundColor: props.attributes.bgColor}}>
+            {/* 添加点击块左上角的设置tab */}
+            <BlockControls>
+                <AlignmentToolbar value={props.attributes.theAlignment} onChange={x => props.setAttributes({theAlignment: x})} />
+            </BlockControls>
             {/* 添加后台设置背景颜色的控制面板 */}
             <InspectorControls initialOpen={true}>
                 <PanelBody title="Background Color">

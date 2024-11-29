@@ -38,7 +38,7 @@ function Quiz(props) {
         }
     }
     return (
-        <div className="cus-frontend-block-ctr" style={{backgroundColor: props.bgColor}}>
+        <div className="cus-frontend-block-ctr" style={{backgroundColor: props.bgColor, textAlign: props.theAlignment}}>
             <p>{props.question}</p>
             <ul>
                 {
