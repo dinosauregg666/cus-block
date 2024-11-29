@@ -36,6 +36,16 @@ wp.blocks.registerBlockType('my-namespace/my-block', {
         bgColor: {type: 'string', default: '#EBEBEB'},
         theAlignment: {type: 'string', default: 'left'}
     },
+    description: '这是添加这个模块的描述，解释这个模块的作用',
+    example: { // 左侧边栏添加该模块的示效果
+      attributes: { // 为该模块添加示例属性
+          question: 'What is my name?',
+          correctAnswer: 3,
+          answers: ['Meowsalot', 'Barksalot', 'Purrsloud', 'Brad'],
+          theAlignment: 'center',
+          bgColor: '#CFE8F1'
+      }
+    },
     edit: EditComponent,
     save: function(props) {
         return null
