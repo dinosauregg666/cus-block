@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "@wordpress/scripts": "^27.9.0"
+  },
+  "dependencies": {
+    "react-color": "^2.19.3"
   }
 }

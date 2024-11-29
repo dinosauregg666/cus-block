@@ -1,6 +1,7 @@
 import './index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
 import {InspectorControls} from "@wordpress/block-editor"
+import {ChromePicker} from 'react-color'
 
 import React from 'react'
 
@@ -87,7 +88,7 @@ function EditComponent(props) {
             <InspectorControls initialOpen={true}>
                 <PanelBody title="Background Color">
                     <PanelRow>
-                        <ColorPicker color={props.attributes.bgColor} onChangeComplete={x => props.setAttributes({bgColor: x.hex})} />
+                        <ChromePicker color={props.attributes.bgColor} onChangeComplete={x => props.setAttributes({bgColor: x.hex})} disableAlpha={true} />
                     </PanelRow>
                 </PanelBody>
             </InspectorControls>
