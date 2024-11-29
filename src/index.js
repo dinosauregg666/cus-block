@@ -1,6 +1,6 @@
 import './index.scss'
 import {TextControl, Flex, FlexBlock, FlexItem, Button, Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
-import {InspectorControls, BlockControls, AlignmentToolbar} from "@wordpress/block-editor"
+import {InspectorControls, BlockControls, AlignmentToolbar, useBlockProps} from "@wordpress/block-editor"
 import {ChromePicker} from 'react-color'
 
 import React from 'react'
@@ -69,6 +69,10 @@ wp.blocks.registerBlockType('my-namespace/my-block', {
 });
 
 function EditComponent(props) {
+    const blockProps = useBlockProps({
+        className: "myClass", style: {backgroundColor: props.attributes.bgColor}
+    })
+
     function updateQuestion(value) {
         props.setAttributes({question: value})
     }
@@ -94,7 +98,7 @@ function EditComponent(props) {
     }
 
     return (
-        <div className="myClass" style={{backgroundColor: props.attributes.bgColor}}>
+        <div {...blockProps} >
             {/* 添加点击块左上角的设置tab */}
             <BlockControls>
                 <AlignmentToolbar value={props.attributes.theAlignment} onChange={x => props.setAttributes({theAlignment: x})} />
