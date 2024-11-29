@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import './frontend.scss';
 
@@ -13,7 +13,22 @@ divsToUpdate.forEach(function(div) {
 
 function Quiz(props) {
     const [isCorrect, setIsCorrect] = useState(undefined)
+    const [isCorrectDelayed, setIsCorrectDelayed] = useState(undefined)
 
+    useEffect(() => {
+        if(isCorrect === false) {
+            setTimeout(() => {
+                setIsCorrect((undefined))
+            }, 2600)
+        }
+
+        if(isCorrect === true) {
+            setTimeout(() => {
+                setIsCorrectDelayed(true)
+            }, 0)
+        }
+
+    }, [isCorrect])
 
     function handleAnswer(index) {
         if(index == props.correctAnswer) {
@@ -28,7 +43,13 @@ function Quiz(props) {
             <ul>
                 {
                     props.answers.map(function(answer, index) {
-                        return <li onClick={() => handleAnswer(index)}>{answer}</li>
+                        return (
+                            <li onClick={isCorrect == true ? undefined : (() => handleAnswer(index))}>
+                                {isCorrectDelayed === true && index == props.correctAnswer && ('√ ')}
+                                {isCorrectDelayed === true && index != props.correctAnswer && ('× ')}
+                                {answer}
+                            </li>
+                        )
                     })
                 }
             </ul>
