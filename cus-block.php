@@ -19,10 +19,16 @@ class CusBlock {
         ));
     }
     function theHTML($attributes) {
+        // 这里的脚本只会在执行这个函数的时候加载，也就是前端博客有放置这个模块的页面才会加载这个脚本
+        if(!is_admin()) { // 只有在不是后台的情况下，才会执行以下代码
+            wp_enqueue_script('cusBlockFrontendJs', plugin_dir_url(__FILE__) . 'build/frontend.js',                 array('wp-element'));
+            wp_enqueue_style('cusBlockFrontendCss', plugin_dir_url(__FILE__) . 'build/frontend.css');
+        }
+
         ob_start(); ?>
 
-        <p> <?php echo esc_html($attributes['skyColor'] . $attributes['grassColor']); ?> </p>;
-
+        <p> <?php echo esc_html($attributes['skyColor'] . $attributes['grassColor']); ?> </p>
+        <div class="cus-frontend-block"><pre style="display: none;"><?php echo wp_json_encode($attributes) ?></pre></div>
         <?php return ob_get_clean();
     }
 }
