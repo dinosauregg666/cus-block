@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './frontend.scss';
 
@@ -12,16 +12,27 @@ divsToUpdate.forEach(function(div) {
 });
 
 function Quiz(props) {
+    const [isCorrect, setIsCorrect] = useState(undefined)
+
+
+    function handleAnswer(index) {
+        if(index == props.correctAnswer) {
+            setIsCorrect(true)
+        } else {
+            setIsCorrect(false)
+        }
+    }
     return (
         <div className="cus-frontend-block-ctr">
             <p>{props.question}</p>
             <ul>
                 {
-                    props.answers.map(function(answer) {
-                        return <li>{answer}</li>
+                    props.answers.map(function(answer, index) {
+                        return <li onClick={() => handleAnswer(index)}>{answer}</li>
                     })
                 }
             </ul>
+            <p className={'cusStyle' + (isCorrect == true ? ' correct' : ' notCorrect') }>is correct</p>
         </div>
     );
 }
